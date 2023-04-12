@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # 継続的に学習時間を確保できる
 
 # 1. 週の学習目標時間
