@@ -50,7 +50,7 @@ def dealer_draw_cards(cards_array, dealer_cards)
   selected_card = cards_array.sample # 配列をシャッフルして、一番最初の要素を取得する
   # p selected_card # ランダムに引いたカード１枚を確認
   dealer_cards << selected_card # 引いたカードを空の配列に入れていく処理
-  if dealer_cards[1]
+  if dealer_cards.size == 2
     puts 'ディーラーの引いたカードはわかりません。'
   else
     puts "ディーラーの引いたカードは#{selected_card[0]}です。" # 配列のインデックス0は、トランプの柄と数字
@@ -87,42 +87,42 @@ while total_score <= 21
   end
 end
 
-puts 'あなたの負けです。' if total_score > 21
-
-puts "ディーラーの引いたカードは#{dealer_cards[1].first}でした。" # 配列のインデックス0は、トランプの柄と数字
-
-def dealer_sum(dealer_cards)
-  dealer_cards.sum { |card| card[1].to_i } # 配列のインデックス1は、該当する得点
-end
-
-dealer_total_score = dealer_sum(dealer_cards)
-puts "ディーラーの現在の得点は#{dealer_total_score}です。"
-
-dealer_last_total_score = 0
-while dealer_total_score <= 21
-  puts 'カードを引きますか？（Y/N）'
-  answer = gets.chomp.upcase
-  if answer == 'Y'
-    dealer_draw_cards(cards_array, dealer_cards)
-    dealer_total_score = dealer_sum(dealer_cards)
-    puts "ディーラーの現在の得点は#{dealer_total_score}です。"
-    break if dealer_total_score > 21
-  elsif answer == 'N'
-    dealer_last_total_score = dealer_total_score
-    break
-  else
-    puts 'YかNで入力してください。'
-  end
-end
-
-puts 'あなたの負けです。' if total_score > 21
-
-if player_last_total_score > dealer_last_total_score
-  puts 'あなたの勝ちです!'
-elsif player_last_total_score < dealer_last_total_score
+if total_score > 21
   puts 'あなたの負けです。'
-elsif player_last_total_score == dealer_last_total_score
-  puts '引き分けです。'
+else
+  puts "ディーラーの引いた2枚目のカードは#{dealer_cards[1].first}でした。" # 配列のインデックス0は、トランプの柄と数字
+
+  def dealer_sum(dealer_cards)
+    dealer_cards.sum { |card| card[1].to_i } # 配列のインデックス1は、該当する得点
+  end
+
+  dealer_total_score = dealer_sum(dealer_cards)
+  puts "ディーラーの現在の得点は#{dealer_total_score}です。"
+
+  # でぃらのごうけいちが17いかだったら17いじょうになるまでひく
+  if dealer_total_score < 17
+    while dealer_total_score < 17
+      dealer_draw_cards(cards_array, dealer_cards)
+      # puts "ディーラーの引いたカードは#{dealer_cards[1].last}です。"
+      dealer_total_score = dealer_sum(dealer_cards)
+    end
+    if dealer_total_score >= 22
+      puts "あなたの得点は#{player_last_total_score}です。"
+      puts "ディーラーの得点は#{dealer_total_score}です。"
+      puts 'あなたの勝ちです。'
+    end
+  end
+
+  puts "あなたの得点は#{player_last_total_score}です。"
+  puts "ディーラーの得点は#{dealer_total_score}です。"
+
+  if player_last_total_score > dealer_total_score
+    puts 'あなたの勝ちです!'
+  elsif player_last_total_score < dealer_total_score
+    puts 'あなたの負けです。'
+  elsif player_last_total_score == dealer_total_score
+    puts '引き分けです。'
+  end
 end
 
 puts 'ブラックジャックを終了します。'
