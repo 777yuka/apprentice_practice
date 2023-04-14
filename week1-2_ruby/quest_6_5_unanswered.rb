@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # 繰り返し処理
 
 # 5. フィボナッチ数列(advanced)
@@ -9,23 +11,26 @@
 
 @memo = {} # 計算済みの項を保存するためのハッシュ
 
-def fibonacci(n)
+def fibonacci(num)
   # 再帰終了条件
-  if n < 0 || n > 30
-    puts "引数nには、0〜30の数値を入れてください"
-    return
-  elsif n == 0
-    puts 0
-    return 0
+  if num.negative? || num > 30
+    raise ArgumentError, '引数nには、0〜30の数値を入れてください'
+  elsif num.zero?
+    puts '0'
+    0
   # 再帰終了条件
-  elsif n == 1
-    puts 1
-    return 1
+  elsif num == 1
+    puts '1'
+    1
   else
-    fibonacci(n - 1) + fibonacci(n - 2)
+    fibonacci(num - 1) + fibonacci(num - 2)
   end
 end
 
+fibonacci(0)
+fibonacci(1)
 fibonacci(2)
-
-
+fibonacci(3)
+fibonacci(4)
+fibonacci(7)
+fibonacci(30) #ループされてしまう

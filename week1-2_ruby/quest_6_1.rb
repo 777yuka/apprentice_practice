@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # 繰り返し処理
 
 # 1. 挨拶
@@ -7,7 +9,7 @@ def hello
   puts "こんにちは！\n" * 100
 end
 
-hello()
+hello
 
 # 100.times do
 #   puts "こんにちは！"

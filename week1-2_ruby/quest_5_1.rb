@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # 条件分岐を使うことができる
 
 # 1. 比較
@@ -9,15 +11,13 @@
 
 def greater(x, y)
   if x < -100 || x > 100 || y < -100 || y > 100
-    puts "引数x,yには、-100以上100以内の整数を入れてください"
+    puts '引数x,yには、-100以上100以内の整数を入れてください'
+  elsif  x > y
+    puts 'x > y'
+  elsif x < y
+    puts 'x < y'
   else
-    if x > y
-      puts "x > y"
-    elsif x < y
-      puts "x < y"
-    else
-      puts "x == y"
-    end
+    puts 'x == y'
   end
 end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # 繰り返し処理
 
 # 3. 総和
@@ -13,4 +15,3 @@ def sum_1_100
 end
 
 sum_1_100
-

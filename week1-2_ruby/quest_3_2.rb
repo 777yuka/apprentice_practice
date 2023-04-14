@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # メソッドを自作し使うことができる
 
 # 2. 挨拶
@@ -5,4 +7,4 @@ def greeting(name)
   puts "おはよう、#{name}!"
 end
 
-greeting("松永")
+greeting('松永')

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ブロックを使った配列の処理ができる
 
 # 1. each
@@ -6,7 +8,7 @@
 # print_names 関数を定義してください。
 # なお、each メソッドと with_index メソッドを使うようにしてください。
 
-names = ["中村", "菅田", "本高", "佐々木", "今野", "矢花"]
+names = %w[中村 菅田 本高 佐々木 今野 矢花]
 
 # def print_names(names)
 #   id = 1
@@ -19,7 +21,7 @@ names = ["中村", "菅田", "本高", "佐々木", "今野", "矢花"]
 # print_names(names)
 
 def print_names(names)
-  names.each_with_index { |name , i| puts "#{i + 1}. #{name}" }
+  names.each_with_index { |name, i| puts "#{i + 1}. #{name}" }
 end
 
 print_names(names)

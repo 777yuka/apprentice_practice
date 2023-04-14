@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # 繰り返し処理
 
 # 4. 総和
@@ -7,7 +9,7 @@ def sum(x, y)
   numbers = (x..y).to_a
   sum = 0
   if x < 1 || x > 100 || y < 1 || y > 100 || (x >= y)
-    puts "xとyには1〜100の整数を入れてください。また、xはyより小さい整数をいれてください。"
+    puts 'xとyには1〜100の整数を入れてください。また、xはyより小さい整数をいれてください。'
   else
     numbers.each do |n|
       sum += n

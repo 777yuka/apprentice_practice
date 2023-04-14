@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # ブロックを使った配列の処理ができる
 
 # 2. map
@@ -8,7 +10,7 @@
 numbers = [1, 2, 3, 4, 5]
 
 def square(numbers)
-  squared_numbers = numbers.map { |n| n ** 2 }
+  squared_numbers = numbers.map { |n| n**2 }
   print squared_numbers
 end
 
