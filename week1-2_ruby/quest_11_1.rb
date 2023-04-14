@@ -37,7 +37,7 @@ class VendingMachine
 
   def deposit_coin(coin)
     if coin == 100
-      
+
     end
 
   end
