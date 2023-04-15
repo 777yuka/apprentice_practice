@@ -7,7 +7,7 @@ puts 'ブラックジャックを開始します。'
 
 deck = Deck.new
 player1 = Player.new(name: "player1", card: [], score: 0)
-dealer = Dealer.new(name: "player1", card: [], score: 0)
+dealer = Dealer.new(name: "dealer", card: [], score: 0)
 deck.shuffle
 
 2.times do |i|
