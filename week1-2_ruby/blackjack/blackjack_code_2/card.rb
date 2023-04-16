@@ -2,7 +2,6 @@ class Card
   attr_reader :mark
   attr_accessor :number
 
-
   #カードクラス初期化（引数はカードのマークとナンバー）
   def initialize(mark, number)
     @mark = mark
