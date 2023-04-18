@@ -30,12 +30,10 @@ class Item
   def initialize(name)
     @name = name
   end
-
 end
 
 # 自動販売機にいれる、カップコーヒーのクラス
 class CapCoffee < Item
-
 end
 
 # 自動販売機にいれる、飲み物のクラス
