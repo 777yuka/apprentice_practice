@@ -2,7 +2,8 @@
 
 # カード１枚のクラス
 class Card
-  attr_reader :suit, :number # クラス内メソッドで表示したいだけなので、リーダー
+  # クラス内メソッドで表示したいだけなので、リーダー
+  attr_reader :suit, :number
 
   # インスタンス初期値（引数はカードのスートとナンバー）
   def initialize(suit, number)
@@ -10,12 +11,12 @@ class Card
     @number = number
   end
 
-  # スートとナンバーを文字列として出力するメソッド
+  # スートとナンバーの情報を文字列として出力するメソッド
   def show
     "#{@suit}の#{@number}"
   end
 
-  # ナンバーに配点するメソッド
+  # 各ナンバーに配点するメソッド
   def allotment(scores)
     if @number == 'A'
       Score.select_ace_number(scores)
@@ -99,6 +100,22 @@ class Player
       puts "#{name}の最終得点は#{Score.sum(@deal)}です。"
     end
   end
+
+  def blackjack
+    puts "#{name}の得点はブラックジャックのため、カードを引きません。"
+  end
+
+  def stand
+    puts "#{name}はカードを引くのをやめました。"
+  end
+
+  def burst
+    if @name == 'player1'
+      puts 'あなたはバーストしました。あなたは負けです。'
+    else
+      puts "#{name}はバーストしました。#{name}は負けです。"
+    end
+  end
 end
 
 # プレーヤーのクラスを継承したディーラーのクラス
@@ -132,6 +149,11 @@ class Dealer < Player
   # オーバーライド
   def show_final_score
     puts "#{name}の最終得点は#{Score.sum(@deal)}です。"
+  end
+
+  # オーバーライド
+  def burst
+    puts "#{name}はバーストしました。#{name}は負けです。"
   end
 end
 
@@ -190,7 +212,6 @@ end
 # p deck.cards.length
 
 print players[0].show_score
-
 while Score.sum(players[0].deal) <= 21
   puts 'カードを引きますか？（Y/N）'
   answer = gets.chomp.upcase
@@ -198,7 +219,7 @@ while Score.sum(players[0].deal) <= 21
     players[0].hand(deck.draw)
     players[0].show_card
     players[0].show_score
-    break if Score.sum(players[0].deal) > 21
+    players[0].burst if Score.sum(players[0].deal) > 21
   elsif answer == 'N'
     break
   else
@@ -207,37 +228,96 @@ while Score.sum(players[0].deal) <= 21
 end
 
 players[1..2].each do |player|
-  while Score.sum(player.deal) < 21
-    player.hand(deck.draw)
-    player.show_card
-    player.show_score if Score.sum(player.deal) <= 20
+  player.show_score
+  # プレーヤー2・3の得点が21点だったらカードを引かない
+  if Score.sum(player.deal) == 21
+    player.blackjack
+  # プレーヤー1（わたし）がバーストしていなかったら、
+  elsif Score.sum(players[0].deal) < 22
+    # プレーヤー2・3の得点が、プレーヤー1（わたし）の得点以下の間、プレーヤー2・3は引き続ける
+    while Score.sum(player.deal) <= Score.sum(players[0].deal)
+      player.hand(deck.draw)
+      player.show_card
+      player.show_score
+    end
+  # プレーヤー1（わたし）がバーストしていなかったら、
+  else
+    # プレーヤー2・3は17点以上になるまで引き続ける
+    while Score.sum(player.deal) < 17
+      player.hand(deck.draw)
+      player.show_card
+      player.show_score
+    end
+  end
+  # 引き終わった最終得点ごとに出力する文字列を変更する
+  if Score.sum(player.deal) == 21
+    player.blackjack
+  elsif Score.sum(player.deal) >= 22
+    player.burst
+  else # 得点が17〜20の場合
+    player.stand
   end
 end
 
-dealer.show_card
-dealer.show_score
-
-# ディーラーの得点が17点以上になるまでカードを引く
-while Score.sum(dealer.deal) < 17
-  dealer.hand(deck.draw)
+if Score.sum(players[0].deal) > 21 && Score.sum(players[1].deal) > 21 && Score.sum(players[2].deal) > 21
+  puts 'プレーヤーは全員バーストしたため、ディーラーの勝ちです。'
+else
+  # ディーラーの2枚目のカードを出力する（隠さない＝デフォルト値）
   dealer.show_card
-  dealer.show_score if Score.sum(dealer.deal) < 17
+  # ディーラーの合計得点を出力する
+  dealer.show_score
+  # プレーヤーの得点が21点だったらカードを引かない
+  if Score.sum(dealer.deal) == 21
+    dealer.blackjack
+  else
+    # ディーラーの得点が17点以上になるまでカードを引く
+    while Score.sum(dealer.deal) < 17
+      dealer.hand(deck.draw)
+      dealer.show_card
+      dealer.show_score
+    end
+    # 得点ごとに出力する文字列を変更する
+    if Score.sum(dealer.deal) == 21
+      dealer.blackjack
+    elsif Score.sum(dealer.deal) >= 22
+      dealer.burst
+    else # 得点が17〜20の場合
+      dealer.stand
+    end
+  end
 end
 
-players.each(&:show_final_score)
-dealer.show_final_score
+# 得点がバーストしなかったプレーヤーのみ配列に入れる
+survivor_players = []
+# バーストしなかったプレーヤーのみ、最終得点を出力する。
+players.each do |player|
+  if Score.sum(player.deal) <= 21
+    player.show_final_score
+    survivor_players << player
+  end
+end
 
+# ディーラーがバーストしなかったら、最終得点を出力する。
+if Score.sum(dealer.deal) <= 21
+  dealer.show_final_score
+  survivor_players << dealer
+end
+# p survivor_players
 
-#   if Score.sum(dealer.deal) >= 22
-#     puts 'あなたの勝ちです。'
-#   elsif Score.sum(player1.deal) > Score.sum(dealer.deal)
-#     puts 'あなたの勝ちです!'
-#   elsif Score.sum(player1.deal) < Score.sum(dealer.deal)
-#     puts 'あなたの負けです。'
-#   # elsif Score.sum(player1.deal) == Score.sum(dealer.deal)
-#   else
-#     puts '引き分けです。'
-#   end
-# end
+if survivor_players.size == 1
+  puts "#{survivor_players[0].name}の勝ちです。"
+else
+  max_score = 0
+  max_score_player = nil
+  survivor_players.each do |player|
+    score = Score.sum(player.deal)
+    if score > max_score
+      max_score = score
+      max_score_player = player
+    end
+  end
+end
 
-# puts 'ブラックジャックを終了します。'
+puts "#{max_score_player.name}の勝ちです。"
+
+puts 'ブラックジャックを終了します。'
