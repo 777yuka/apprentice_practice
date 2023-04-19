@@ -44,7 +44,7 @@ class Player
   end
 
   def blackjack
-    puts "#{name}の得点はブラックジャックのため、カードを引きません。"
+    puts "#{name}の得点はブラックジャックです。"
   end
 
   def stand
@@ -56,6 +56,22 @@ class Player
       puts 'あなたはバーストしました。あなたは負けです。'
     else
       puts "#{name}はバーストしました。#{name}は負けです。"
+    end
+  end
+
+  def winner
+    if @name == 'player1'
+      puts 'あなたの勝ちです。'
+    else
+      puts "#{name}の勝ちです。"
+    end
+  end
+
+  def winner_dealer_burst
+    if @name == 'player1'
+      puts 'ディーラーがバーストしたため、あなたの勝ちです。'
+    else
+      puts "ディーラーがバーストしたため、#{name}の勝ちです。"
     end
   end
 end
