@@ -9,8 +9,6 @@
 # 整数 n に対して、n 日間お手伝いを継続した時のお小遣いの金額を算出する関数 fibonacci を定義してください。
 # n：整数、1 <= n <= 30
 
-@memo = {} # 計算済みの項を保存するためのハッシュ
-
 def fibonacci(num)
   # 再帰終了条件
   if num.negative? || num > 30
@@ -23,7 +21,17 @@ def fibonacci(num)
     puts '1'
     1
   else
-    fibonacci(num - 1) + fibonacci(num - 2)
+    # aに0を、bに1を代入する
+    a, b = 0, 1
+    # num-1回ループする
+    (num - 1).times do
+      # aにbの値を、bにa+bの値を代入する
+      a, b = b, a + b
+    end
+    # bの値を出力する
+    puts b
+    # bの値を返す
+    b
   end
 end
 
@@ -33,4 +41,4 @@ fibonacci(2)
 fibonacci(3)
 fibonacci(4)
 fibonacci(7)
-fibonacci(30) #ループされてしまう
+fibonacci(30)

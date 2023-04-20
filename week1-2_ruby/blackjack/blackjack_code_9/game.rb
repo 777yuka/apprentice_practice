@@ -55,7 +55,6 @@ players[1..2].each do |player|
   end
   if Score.sum(player.deal) == 21 # 引き終わった最終得点ごとに出力する文字列を変更する
     player.blackjack
-    next_method
   elsif Score.sum(player.deal) < 21
     player.stand
   else
@@ -99,15 +98,14 @@ else # ディーラーのターン
     max_score_player = [] # 現在の最高得点を持つプレーヤーを入れる配列を初期化
     survivor_players.each do |player| # バーストしなかったプレーヤーの配列から一人ずつ取得
       player_score = Score.sum(player.deal) # 各プレーヤーの最終得点を代入
-      if player_score >= current_highest_score # プレーヤーの最終得点が現在の最高得点以上の場合
-        if player_score == current_highest_score # その中でプレーヤーの最終得点と現在の最高得点が同点の場合
-          # max_score << player_score
-          max_score_player << player # 同点プレーヤーを配列に「追加」する
-        else
-          current_highest_score = player_score # プレーヤーの最終得点が現在の最高得点より大きい場合
-          # max_score = [player_score]
-          max_score_player = [player] # 最高得点のプレーヤーのみで配列を「更新」する
-        end
+      # if player_score >= current_highest_score # プレーヤーの最終得点が現在の最高得点以上の場合
+      if player_score == current_highest_score # その中でプレーヤーの最終得点と現在の最高得点が同点の場合
+        # max_score << player_score
+        max_score_player << player # 同点プレーヤーを配列に「追加」する
+      elsif player_score > current_highest_score
+        current_highest_score = player_score # プレーヤーの最終得点が現在の最高得点より大きい場合
+        # max_score = [player_score]
+        max_score_player = [player] # 最高得点のプレーヤーのみで配列を「更新」する
       end
     end
 
