@@ -6,3 +6,4 @@ read -p "パスワードを入力してください： " password
 echo "$service:$username:$password" >> passwords.txt
 
 echo "Thank you!"
+
